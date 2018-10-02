@@ -1,12 +1,12 @@
 class Cell {
   constructor(board, y, x) {
-    this.board = board;    // board object
+    this.board = board; // board object
     this.y = y;
     this.x = x;
     this.id = `r${y}c${x}`;
-    this.mine = false;     // is this a mine?
+    this.mine = false; // is this a mine?
     this.revealed = false; // is this cell revealed?
-    this.number = 0;       // Number of mine neighbors                     
+    this.number = 0; // Number of mine neighbors
   }
 
   neighbors() {
@@ -16,8 +16,12 @@ class Cell {
         if (xdelta === 0 && ydelta === 0) continue;
         let newX = this.x + xdelta;
         let newY = this.y + ydelta;
-        if (newX >= 0 && newX < this.board.width
-          && newY >= 0 && newY < this.board.height)
+        if (
+          newX >= 0 &&
+          newX < this.board.width &&
+          newY >= 0 &&
+          newY < this.board.height
+        )
           out.push(this.board.cells[newY][newX]);
       }
     }
@@ -28,7 +32,7 @@ class Cell {
     this.revealAndCheckNeighbors();
 
     if (this.mine) {
-      return this.board.game.endGame(false)
+      return this.board.game.endGame(false);
     } else {
       if (this.board.left === 0) {
         return this.board.game.endGame(true);
@@ -40,7 +44,7 @@ class Cell {
     this.show();
 
     let toCheck = [this];
-    const seen = new Set;
+    const seen = new Set();
 
     while (toCheck.length > 0) {
       const cell = toCheck.pop();
@@ -52,7 +56,7 @@ class Cell {
         cell.show();
         this.board.left -= 1;
         if (cell.number === 0) {
-          toCheck.push(...cell.neighbors())
+          toCheck.push(...cell.neighbors());
         }
       }
     }
@@ -62,9 +66,9 @@ class Cell {
     if (!showMines && !this.revealed) {
       return null;
     } else if (this.mine) {
-      return "mine";
+      return 'mine';
     } else {
-      return "n" + this.number;
+      return 'n' + this.number;
     }
   }
 
@@ -75,11 +79,11 @@ class Cell {
 
 class Board {
   constructor(game, width, height) {
-    this.game = game;             // game object
+    this.game = game; // game object
     this.width = width;
     this.height = height;
-    this.left = width * height;   // non-mine, non-revealed cells
-    this.cells = []
+    this.left = width * height; // non-mine, non-revealed cells
+    this.cells = [];
     for (let y = 0; y < height; y++) {
       const row = [];
       for (let x = 0; x < width; x++) {
@@ -94,7 +98,7 @@ class Board {
     while (placed < numMines) {
       const y = Math.floor(Math.random() * this.height);
       const x = Math.floor(Math.random() * this.width);
-      const cell = this.cells[y][x]
+      const cell = this.cells[y][x];
       if (!cell.mine) {
         cell.mine = true;
         this.left -= 1;
@@ -107,14 +111,14 @@ class Board {
   }
 
   makeBoard() {
-    const board = document.getElementById("board");
+    const board = document.getElementById('board');
     for (let row of this.cells) {
-      const trow = document.createElement("tr");
+      const trow = document.createElement('tr');
       for (let cell of row) {
-        const tcell = document.createElement("td");
+        const tcell = document.createElement('td');
         tcell.id = cell.id;
         tcell.className = cell.getContent(false);
-        tcell.addEventListener("click", cell.handleClick.bind(cell))
+        tcell.addEventListener('click', cell.handleClick.bind(cell));
         trow.appendChild(tcell);
       }
       board.appendChild(trow);
@@ -139,4 +143,4 @@ class Game {
   }
 }
 
-const game = new Game(11, 11, 11);
+const game = new Game(16, 16, 40);
