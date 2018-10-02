@@ -134,12 +134,13 @@ class Game {
   }
 
   endGame(isWin) {
+    const gameStatus = isWin ? 'YOU WON!' : 'GAME OVER!';
     for (let row of this.board.cells) {
       for (let cell of row) {
         cell.show(true);
       }
     }
-    alert(isWin);
+    alert(gameStatus);
   }
 }
 
